@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+USERBINDIR="$(systemd-path user-binaries)"
 
 # Determine architecture.
 ARCH="$(uname -m)"
@@ -44,8 +47,10 @@ Name=Godot
 Type=Application
 DESKTOP
 xdg-desktop-menu install ${tmpdir}/godot-engine.desktop
-
-# Cleanup.
 rm -rf ${tmpdir}
+
+# Creating commandline symlink.
+rm -f ${USERBINDIR}/godot
+ln -s ${BASEDIR}/${exe} ${USERBINDIR}/godot
 
 echo "Done"
